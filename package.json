@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "files": [
     "lib",
+    "src",
     "README.md",
     "LICENSE",
     "package.json"
@@ -42,13 +43,13 @@
     },
     {
       "name": "ryanatkn"
-    }, 
+    },
     {
       "name": "Adam Royle"
-    }, 
+    },
     {
       "name": "Christian Schuhmann"
-    }, 
+    },
     {
       "name": "Jason Huang"
     }

@@ -1,6 +1,20 @@
 function defaultValuesEqual(a, b) {
     return a === b;
 }
+function isPlainObject(obj) {
+    return obj && (obj.constructor === Object || obj.constructor === undefined);
+}
+
+const values = (obj, keys) => keys.map(key => obj[key]);
+
+const objectFn = keys => {
+    return (...args) => {
+        return keys.reduce((val, key, i) => {
+            val[key] = args[i];
+            return val;
+        }, {});
+    };
+}
 
 // TODO: Reintroduce comment about cache size, slightly rewritten
 export function defaultMemoize(func, valuesEqual = defaultValuesEqual) {
@@ -20,8 +34,9 @@ export function defaultMemoize(func, valuesEqual = defaultValuesEqual) {
 export function createSelectorCreator(memoize, ...memoizeOptions) {
     return (...funcs) => {
         let recomputations = 0;
-        const resultFunc = funcs.pop();
-        const dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+        const objectKeys = isPlainObject(funcs[0]) ? Object.keys(funcs[0]) : undefined;
+        const resultFunc = objectKeys ? objectFn(objectKeys) : funcs.pop();
+        const dependencies = objectKeys ? values(funcs[0], objectKeys) : Array.isArray(funcs[0]) ? funcs[0] : funcs;
 
         const memoizedResultFunc = memoize(
             (...args) => {
